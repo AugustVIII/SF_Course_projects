@@ -1,0 +1,14 @@
+Задание 4.1
+База данных содержит список аэропортов практически всех крупных городов России. В большинстве городов есть только один аэропорт. Исключение составляет:
+
+Код:
+
+SELECT 
+    a.city,
+    count(a.airport_name) AS airports_total
+FROM dst_project.airports AS a
+GROUP BY a.city
+HAVING count(a.airport_name) > 1 
+
+Ответ: Moscow, Ulyanovsk
+
