@@ -29,3 +29,31 @@ HAVING count(a.airport_name) > 1
         FROM dst_project.flights AS f
         WHERE f.actual_arrival BETWEEN '2017-04-01' AND'2017-09-01' 
             AND f.status = 'Arrived'
+      
+Задание 4.3
+
+    4.3.1
+    SELECT  COUNT (f.flight_id)
+        FROM dst_project.flights AS f
+        WHERE f.status = 'Cancelled'
+        
+    4.3.2
+    SELECT  COUNT (a.aircraft_code)
+        FROM dst_project.aircrafts AS a
+        WHERE a.model LIKE '%Boeing%' OR a.model LIKE '%Sukhoi Superjet%' OR a.model LIKE '%Airbus%' 
+        GROUP BY a.model LIKE '%Boeing%',  a.model LIKE '%Sukhoi Superjet%', a.model LIKE '%Airbus%' 
+    
+    4.3.3
+    SELECT   a.timezone,
+            COUNT(a.timezone)
+        FROM dst_project.airports AS a
+        GROUP BY a.timezone
+        ORDER BY 2 DESC
+    
+    4.4.4
+    SELECT  f.flight_id,
+            f.actual_departure - f.scheduled_departure AS Время_задержки
+        FROM dst_project.flights AS f
+        WHERE f.actual_departure notnull
+        ORDER BY 2 desc
+        LIMIT 1
