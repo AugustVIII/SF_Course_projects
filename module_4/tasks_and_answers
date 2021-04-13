@@ -57,3 +57,38 @@ HAVING count(a.airport_name) > 1
         WHERE f.actual_departure notnull
         ORDER BY 2 desc
         LIMIT 1
+        
+Задание 4.4
+    
+    4.4.1
+    SELECT  f.flight_id,
+            f.scheduled_departure
+        FROM dst_project.flights AS f
+        ORDER BY 2
+        LIMIT 1
+    
+    4.4.2
+    -- 1) Находим разность между датами 
+    -- 2) из получившегося времени извлекаем часы и переводим в минуты умножая на 60 
+    -- 3) из получившегося времени извлекаем минуты и прибавляем к пункту 2
+    -- 4) находим максимальное время
+    SELECT MAX(EXTRACT(HOUR FROM (f.scheduled_arrival - f.scheduled_departure)) *60 + EXTRACT(MINUTE FROM (f.scheduled_arrival - f.scheduled_departure)))
+        FROM dst_project.flights AS f
+        
+    4.4.3
+    SELECT  f.flight_id,
+            f.scheduled_arrival - f.scheduled_departure AS Длительность_рейса,
+            departure_airport,
+            arrival_airport
+        FROM dst_project.flights AS f
+        ORDER BY 2 DESC
+        LIMIT 1
+    
+    4.4.4
+    -- 1) Находим разность между датами 
+    -- 2) из получившегося времени извлекаем часы и переводим в минуты умножая на 60 
+    -- 3) из получившегося времени извлекаем минуты и прибавляем к пункту 2
+    -- 4) находим среднее значение
+    -- 5) округляем
+    SELECT ROUND(AVG(EXTRACT(HOUR FROM (f.scheduled_arrival - f.scheduled_departure)) *60 + EXTRACT(MINUTE FROM (f.scheduled_arrival - f.scheduled_departure))))
+        FROM dst_project.flights AS f
