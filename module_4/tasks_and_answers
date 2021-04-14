@@ -114,4 +114,38 @@ HAVING count(a.airport_name) > 1
         FROM dst_project.tickets AS t 
             LEFT JOIN dst_project.boarding_passes AS bp ON t.ticket_no = bp.ticket_no
         WHERE t.passenger_id = '4313 788533'
+        
+Задание 5
     
+    5.1
+    SELECT COUNT(*)
+        FROM dst_project.flights AS f
+            LEFT JOIN dst_project.airports AS a ON f.arrival_airport = a.airport_code
+        WHERE 
+            a.city = 'Anapa' 
+            AND f.status = 'Arrived'
+            AND f.actual_arrival BETWEEN '01-01-2017' AND '12-31-2017'
+    5.2
+    SELECT  COUNT(*)
+        FROM dst_project.flights f
+        WHERE 
+            f.departure_airport = 'AAQ'
+            AND (date_part('year', f.actual_departure)) = 2017
+            AND (date_part('month', f.actual_departure)) IN ('1','2','12')
+            
+    5.3
+    SELECT COUNT(*)
+        FROM dst_project.flights f
+            LEFT JOIN dst_project.airports a ON f.arrival_airport = a.airport_code
+        WHERE 
+            a.city = 'Anapa' 
+            AND f.status = 'Cancelled'
+            
+    5.4
+    SELECT a.model,
+       COUNT(distinct s.seat_no)
+    FROM dst_project.aircrafts a
+        JOIN dst_project.flights AS f ON f.aircraft_code = a.aircraft_code
+        JOIN dst_project.seats AS s ON f.aircraft_code = s.aircraft_code
+    WHERE f.departure_airport = 'AAQ' 
+    GROUP BY 1
