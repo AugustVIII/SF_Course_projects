@@ -92,3 +92,20 @@ HAVING count(a.airport_name) > 1
     -- 5) округляем
     SELECT ROUND(AVG(EXTRACT(HOUR FROM (f.scheduled_arrival - f.scheduled_departure)) *60 + EXTRACT(MINUTE FROM (f.scheduled_arrival - f.scheduled_departure))))
         FROM dst_project.flights AS f
+        
+Задание 4.5
+
+    4.5.1
+    
+    
+    
+    4.5.2
+    SELECT MIN(b.total_amount)
+    FROM dst_project.bookings AS b
+        
+    4.5.3
+    SELECT bp.seat_no
+        FROM dst_project.tickets AS t 
+        LEFT JOIN dst_project.boarding_passes AS bp ON t.ticket_no = bp.ticket_no
+        WHERE t.passenger_id = '4313 788533'
+    
