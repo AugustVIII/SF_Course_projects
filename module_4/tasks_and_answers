@@ -149,3 +149,37 @@ HAVING count(a.airport_name) > 1
         JOIN dst_project.seats AS s ON f.aircraft_code = s.aircraft_code
     WHERE f.departure_airport = 'AAQ' 
     GROUP BY 1
+    
+   
+  Итоговый запрос
+  
+  SELECT  f.flight_id,
+        a1.city AS departure_city,
+        a1.latitude AS departure_latitude,
+        a1.longitude AS departure_longitude,
+        a2.city AS arrival_city,
+        a2.latitude AS arrival_latitude,
+        a2.longitude AS arrival_longitude,
+        ac.model,
+        ac.range,
+        COUNT(bp.seat_no) AS seats_amount,
+        DATE_PART('hour', f.actual_arrival - f.actual_departure) * 60 + date_part('minute', f.actual_arrival - f.actual_departure) AS flytime_minutes,
+        DATE_PART('minute', (f.actual_arrival - f.actual_departure) - (f.scheduled_arrival - f.scheduled_departure)) AS flytime_lag,
+        COUNT(distinct tf.ticket_no) AS tickets_count,
+        SUM(tf.amount) tickets_sum
+
+    FROM    dst_project.flights AS f
+            LEFT JOIN dst_project.airports AS a1 ON f.departure_airport = a1.airport_code
+            LEFT JOIN dst_project.airports AS a2 ON f.arrival_airport = a2.airport_code
+            LEFT JOIN dst_project.aircrafts AS ac ON f.aircraft_code = ac.aircraft_code
+            LEFT JOIN dst_project.boarding_passes bp ON f.flight_id = bp.flight_id
+            LEFT JOIN dst_project.ticket_flights tf ON bp.ticket_no = tf.ticket_no AND bp.flight_id = tf.flight_id
+    
+    WHERE   departure_airport = 'AAQ'
+            AND (date_trunc('month', scheduled_departure) in ('2017-01-01','2017-02-01', '2017-12-01'))
+            AND status not in ('Cancelled')
+    
+    GROUP BY f.flight_id, ac.model, ac.range, a1.city, a1.latitude, a1.longitude, a2.city, a2.latitude, a2.longitude
+    
+    ORDER BY tickets_sum DESC, flytime_minutes DESC
+    
